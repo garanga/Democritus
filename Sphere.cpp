@@ -248,6 +248,9 @@ Sphere::correct(double dt,bool info)
         std::cout << "coeff1" << "\t" << coeff1 << std::endl;
         std::cout << "coeff3" << "\t" << coeff3 << std::endl;
         std::cout << "coeff4" << "\t" << coeff4 << std::endl;
+
+        std::cout << "force" << force_ << std::endl;
+
         std::cout << "accel" << accel << std::endl;
         std::cout << "corr" << corr << std::endl;
     }
@@ -378,7 +381,9 @@ void
 force(Sphere& s1, Sphere& s2, double lx, double ly)
 {
     double dx = normalize(s1.x()-s2.x(),lx);
+//    double dx = s1.x()-s2.x();
     double dy = normalize(s1.y()-s2.y(),ly);
+//    double dy = s1.y()-s2.y();
     double rr=sqrt(dx*dx+dy*dy);
     double r1=s1.r();
     double r2=s2.r();

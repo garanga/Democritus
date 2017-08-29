@@ -12,6 +12,12 @@
 
 extern std::vector<Sphere> particle;   /* <===== replace this line if necessary */
 
+bool do_touch(const Sphere & pi,
+          const Sphere & pk)
+{
+  return Distance(pi,pk,lx,ly)<pi.r()+pk.r();
+}
+
 void init_algorithm() {}
 
 void step()
@@ -19,11 +25,7 @@ void step()
     integrate();
 }
 
-bool do_touch(const Sphere & pi,
-          const Sphere & pk)
-{
-  return Distance(pi,pk,lx,ly)<pi.r()+pk.r();
-}
+
 void make_forces()
 {
     for(unsigned int i=0; i<particle.size()-1; i++)

@@ -38,46 +38,40 @@ int main(int argc, char* argv[])
 {
 
 
-//    std::cout << lx << "\t" << ly << std::endl;
-
     lx = 100.0; ly = 100.0;
+
+//    std::cout << lx << "\t" << ly << std::endl;
 
     fenergy.precision(10);
 
-    init_system("../init_hopper/closed_hopper.random");
+//    init_system("../init_hopper/closed_hopper.random");
+    init_system("../SandGlass/SandGlass.random");
 
     std::cout << G << std::endl;
 
     init_algorithm();
 //
-//    phase_plot(fphase);
+    phase_plot1(0);
 //
 
 
-    std::cout << "\n"
-              << "\n"
-              << "Initial position" << "\n"
-              << "Particle 111:" << "\n"
-              << "predicted rtd0_ " << "\t" << particle[111].pos () << "\t"
-              << "predicted rtd2_ " << "\t" << particle[111].rtd2() << "\t"
-              << "predicted rtd3_ " << "\t" << particle[111].rtd3() << "\t"
-              << "predicted rtd4_ " << "\t" << particle[111].rtd4() << "\t"
-              << "\n"
-              << "\n";
+//    std::cout << "\n"
+//              << "\n"
+//              << "Initial position" << "\n"
+//              << "Particle 111:" << "\n"
+//              << "predicted rtd0_ " << "\t" << particle[111].pos () << "\t"
+//              << "predicted rtd2_ " << "\t" << particle[111].rtd2() << "\t"
+//              << "predicted rtd3_ " << "\t" << particle[111].rtd3() << "\t"
+//              << "predicted rtd4_ " << "\t" << particle[111].rtd4() << "\t"
+//              << "\n"
+//              << "\n";
 
     for(int i=0; i<nstep; i++)
     {
 
         std::cout << "Step No. " << i+1 << std::endl;
 
-//        std::cout << particle[500].m  () << std::endl;
-//        std::cout << particle[500].pos() << std::endl;
-
-
-
-
-
-
+        std::cout << "energy: " << total_kinetic_energy() << std::endl;
 
         step();
         if((i+1)%nprint==0)
@@ -109,20 +103,20 @@ void integrate()
             particle[i].predict(timestep);
 
 
-            if (i == 111)
-            {
-                std::cout << "\n"
-                          << "\n"
-                          << "Predict info" << "\n"
-                          << "Particle 111:" << "\n"
-                          << "predicted rtd0_ " << "\t" << particle[i].pos () << "\t"
-                          << "predicted rtd2_ " << "\t" << particle[i].rtd2() << "\t"
-                          << "predicted rtd3_ " << "\t" << particle[i].rtd3() << "\t"
-                          << "predicted rtd4_ " << "\t" << particle[i].rtd4() << "\t"
-                          << "\n"
-                          << "\n";
-
-            }
+//            if (i == 320)
+//            {
+//                std::cout << "\n"
+//                          << "\n"
+//                          << "Predict info" << "\n"
+//                          << "Particle 111:" << "\n"
+//                          << "predicted rtd0_ " << "\t" << particle[i].pos () << "\t"
+//                          << "predicted rtd2_ " << "\t" << particle[i].rtd2() << "\t"
+//                          << "predicted rtd3_ " << "\t" << particle[i].rtd3() << "\t"
+//                          << "predicted rtd4_ " << "\t" << particle[i].rtd4() << "\t"
+//                          << "\n"
+//                          << "\n";
+//
+//            }
 
         }
         else
@@ -151,40 +145,40 @@ void integrate()
 //                          << "predicted rtd2_ " << "\t" << particle[i].rtd2() << "\t"
 //                          << "\n"
 //                          << "\n";
+//
+//            }
+//            if (i==320)
+//            {
+//                particle[i].correct(timestep,true);
+//            }
+//            else
+//            {
+                particle[i].correct(timestep);
+//            }
+
+//            if (i == 320)
+//            {
+//                std::cout << "\n"
+//                          << "\n"
+//                          << "Corrected info" << "\n"
+//                          << "Particle 111:" << "\n"
+//                          << "predicted rtd0_ " << "\t" << particle[i].pos () << "\t"
+//                          << "predicted rtd2_ " << "\t" << particle[i].rtd2() << "\t"
+//                          << "predicted rtd3_ " << "\t" << particle[i].rtd2() << "\t"
+//                          << "predicted rtd4_ " << "\t" << particle[i].rtd2() << "\t"
+//                          << "\n"
+//                          << "\n";
 
 //            }
-            if (i==111)
-            {
-                particle[i].correct(timestep,true);
-            }
-            else
-            {
-                particle[i].correct(timestep);
-            }
-
-            if (i == 111)
-            {
-                std::cout << "\n"
-                          << "\n"
-                          << "Corrected info" << "\n"
-                          << "Particle 111:" << "\n"
-                          << "predicted rtd0_ " << "\t" << particle[i].pos () << "\t"
-                          << "predicted rtd2_ " << "\t" << particle[i].rtd2() << "\t"
-                          << "predicted rtd3_ " << "\t" << particle[i].rtd2() << "\t"
-                          << "predicted rtd4_ " << "\t" << particle[i].rtd2() << "\t"
-                          << "\n"
-                          << "\n";
-
-            }
         }
     }
 
 //    std::cout << "Set periodic boundary conditions" << std::endl;
 
-    for(unsigned int i=0; i<particle.size(); i++)
-    {
-        particle[i].periodic_bc(x_0, y_0, lx, ly);
-    }
+//    for(unsigned int i=0; i<particle.size(); i++)
+//    {
+//        particle[i].periodic_bc(x_0, y_0, lx, ly);
+//    }
 
 //    std::cout << "Increase time step" << std::endl;
 
