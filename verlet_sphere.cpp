@@ -7,9 +7,10 @@
 
 
 
-//#include "common.h"
+#include "common.h"
 #include "Sphere.h"                    /* <===== replace this line if necessary */
 
+#include <algorithm>
 #include <iostream>
 #include <set>
 #include <vector>
@@ -31,10 +32,37 @@ std::vector<std::vector<std::vector<int>>> celllist;
 
 bool verlet_needs_update();
 bool make_verlet();
+
 bool do_touch(int i, int k);
 
 void init_algorithm()
 {
+
+    Sphere s;
+
+    s = *std::max_element(particle.begin(), particle.end(), [](const Sphere& s1, const Sphere& s2) {return ((s1.r() < s2.r()));});
+    double r_max = s.r();
+
+    s = *std::min_element(particle.begin(), particle.end(), [](const Sphere& s1, const Sphere& s2) {return ((s1.x() < s2.x()));});
+    double x_0 = s.x() - r_max;
+
+    s = *std::min_element(particle.begin(), particle.end(), [](const Sphere& s1, const Sphere& s2) {return ((s1.y() < s2.y()));});
+    double y_0 = s.y() - r_max;
+
+    s = *std::max_element(particle.begin(), particle.end(), [](const Sphere& s1, const Sphere& s2) {return ((s1.x() < s2.x()));});
+    double lx = s.x() + r_max - x_0;
+
+    s = *std::max_element(particle.begin(), particle.end(), [](const Sphere& s1, const Sphere& s2) {return ((s1.y() < s2.y()));});
+    double ly = s.y() + r_max - y_0;
+
+    std::cout << "!!!!" << std::endl;
+    std::cout << "r_max" << r_max << std::endl;
+    std::cout << "x_0" << x_0 << std::endl;
+    std::cout << "y_0" << y_0 << std::endl;
+    std::cout << "lx" << lx << std::endl;
+    std::cout << "ly" << ly << std::endl;
+    std::cout << "!!!!" << std::endl;
+
   safe=particle;
   Timesafe=Time;
   vnx=int(lx/verlet_grid);
@@ -100,34 +128,49 @@ bool make_verlet()
 
         for(int iix=ix-1; iix<=ix+1; iix++)
         {
+
+            // One should also take into account a case when iix > vnx -1
+            if (iix > vnx -1) break;
+
             for(int iiy=iy-1; iiy<=iy+1; iiy++)
             {
+
+
+
+                // One should also take into account a case when iiy > vny -1
+                // One should also take into account a case when iix > vnx -1
+                if (iiy > vny -1) break;
 
                 // This is again due to periodicity
 //                int wx = (iix+vnx)%vnx;
 //                int wy = (iiy+vny)%vny;
 
-                int wx = (iix+vnx)%vnx;
-                int wy = (iiy+vny)%vny;
+                int wx = iix;
+                int wy = iiy;
+
 
                 for(unsigned int k=0; k<celllist[wx][wy].size(); k++)
                 {
-
                     int pk=celllist[wx][wy][k];
-                    if(pk<(int)i){
-        if(Distance(particle[i],particle[pk], lx, ly)<
-           particle[i].r()+particle[pk].r()+verlet_distance){
-          if((particle[i].ptype()==0) ||
-         (particle[pk].ptype()==0)){
-        verlet[i].insert(pk);
+                    if(pk<(int)i)
+                    {
+                        if(Distance(particle[i],particle[pk],lx,ly) <
+                           particle[i].r()+particle[pk].r()+verlet_distance)
+                        {
+                            if((particle[ i].ptype()==0) ||
+                               (particle[pk].ptype()==0))
+                            {
+                                verlet[i].insert(pk);
 
-        if(oldverlet.find(pk)==oldverlet.end()){
-          if(do_touch(i,pk)) {
-            ok=false;
-              }
-            }
-              }
-            }
+                                if(oldverlet.find(pk)==oldverlet.end())
+                                {
+                                    if(do_touch(i,pk))
+                                    {
+                                        ok=false;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -135,11 +178,13 @@ bool make_verlet()
     }
     return ok;
 }
+
 bool do_touch(int i, int k)
 {
-  return (Distance(particle[i],particle[k],lx,ly)
-      <particle[i].r()+particle[k].r());
+  return (Distance(particle[i],particle[k],lx,ly) <
+          particle[i].r()+particle[k].r());
 }
+
 bool verlet_needs_update()
 {
   for(unsigned int i=0;i<no_of_particles;i++){
@@ -153,10 +198,9 @@ void make_forces()
 {
     for(unsigned int i=0; i<particle.size(); i++)
     {
-        std::set<int>::iterator it;
-        for(it = verlet[i].begin(); iter! = verlet[i].end(); iter++)
+        for(auto it=verlet[i].begin(); it!=verlet[i].end(); it++)
         {
-            force(particle[i],particle[*iter], lx, ly);
+            force(particle[i],particle[*it], lx, ly);
         }
     }
 }

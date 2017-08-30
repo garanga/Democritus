@@ -264,7 +264,12 @@ Sphere::boundary_conditions(int n, double timestep, double Time)
     switch(ptype())
     {
         case(0): break;     // normal granular particle
-        case(1): break;     // static wall
+
+
+        case(1 ): break;     // static wall
+        case(10): break;     // static wall
+
+
         case(2):            // oscillating wall
         {
             x() = 0.5-0.4*cos(10.0*Time);
@@ -372,18 +377,20 @@ operator << (std::ostream& os, const Sphere& p)
 double
 Distance(const Sphere& s1, const Sphere& s2, double lx, double ly)
 {
-    double dx = normalize(s1.rtd0_.x()-s2.rtd0_.x(),lx);
-    double dy = normalize(s1.rtd0_.y()-s2.rtd0_.y(),ly);
+//    double dx = normalize(s1.rtd0_.x()-s2.rtd0_.x(),lx);
+    double dx = s1.rtd0_.x()-s2.rtd0_.x();
+//    double dy = normalize(s1.rtd0_.y()-s2.rtd0_.y(),ly);
+    double dy = s1.rtd0_.y()-s2.rtd0_.y();
     return sqrt(dx*dx+dy*dy);
 }
 
 void
 force(Sphere& s1, Sphere& s2, double lx, double ly)
 {
-    double dx = normalize(s1.x()-s2.x(),lx);
-//    double dx = s1.x()-s2.x();
-    double dy = normalize(s1.y()-s2.y(),ly);
-//    double dy = s1.y()-s2.y();
+//    double dx = normalize(s1.x()-s2.x(),lx);
+    double dx = s1.x()-s2.x();
+//    double dy = normalize(s1.y()-s2.y(),ly);
+    double dy = s1.y()-s2.y();
     double rr=sqrt(dx*dx+dy*dy);
     double r1=s1.r();
     double r2=s2.r();

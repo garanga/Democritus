@@ -10,7 +10,7 @@
 #include "Sphere.h"               /* <===== replace this line if necessary */
 #include "vtk.h"
 
-
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -34,37 +34,45 @@ std::vector<Sphere> particle;     /* <===== replace this line if necessary */
 void   init_system(char* fname);
 double total_kinetic_energy();
 
+void importToFile(std::ostream&);
+
 int main(int argc, char* argv[])
 {
 
-
     lx = 100.0; ly = 100.0;
 
-//    std::cout << lx << "\t" << ly << std::endl;
+    std::cout << "!!!!!!!!!" << std::endl;
+    std::cout << "!!!!!!!!!" << std::endl;
+    std::cout << "!!!!!!!!!" << std::endl;
+//    std::cout << std::min_element(particle.begin(), particle.end()) << std::endl;
+//    std::cout << std::max_element(particle.begin(), particle.end()) << std::endl;
+
+
+//    std::vector<int> v1 = {1,2,3,4,5,6,7,8,9};
+
+//    int res = *(std::max_element(v1.begin(), v1.end()));
+
+//    std::cout << *(std::max_element(v1.begin(), v1.end())) << std::endl;
+
+
+//    Sphere s = *(std::min_element(particle.begin(), particle.end(),
+//        [](const Sphere& s1, const Sphere& s2) {return (s1.x() < s2.x());}));
+
+
+
+    std::cout << "!!!!!!!!!" << std::endl;
+    std::cout << "!!!!!!!!!" << std::endl;
+    std::cout << "!!!!!!!!!" << std::endl;
 
     fenergy.precision(10);
 
 //    init_system("../init_hopper/closed_hopper.random");
-    init_system("../SandGlass/SandGlass.random");
-
-    std::cout << G << std::endl;
+//    init_system("../SandGlass/SandGlass.random");
+    init_system("sandglass.txt");
 
     init_algorithm();
 //
     phase_plot1(0);
-//
-
-
-//    std::cout << "\n"
-//              << "\n"
-//              << "Initial position" << "\n"
-//              << "Particle 111:" << "\n"
-//              << "predicted rtd0_ " << "\t" << particle[111].pos () << "\t"
-//              << "predicted rtd2_ " << "\t" << particle[111].rtd2() << "\t"
-//              << "predicted rtd3_ " << "\t" << particle[111].rtd3() << "\t"
-//              << "predicted rtd4_ " << "\t" << particle[111].rtd4() << "\t"
-//              << "\n"
-//              << "\n";
 
     for(int i=0; i<nstep; i++)
     {
@@ -86,6 +94,13 @@ int main(int argc, char* argv[])
 //        }
     }
 //    phase_plot(flast);
+
+
+//    ofstream fout("sandglass.txt");
+//
+//    importToFile(fout);
+//
+//    fout.close();
 }
 
 void integrate()
@@ -405,3 +420,23 @@ void phase_plot1(int i)
 //
 //    renderWindow->Render();
 //    renderWindowInteractor->Start();
+
+void importToFile(std::ostream& os)
+{
+    os << "#gravity: 0.0 -9.81 0.0 \n";
+    os << "#Time: 0.0 \n";
+    os << "#nstep: 2000000 \n";
+    os << "#timestep: 1.0e-6 \n";
+    os << "#nprint: 1000 \n";
+    os << "#nenergy: 1000 \n";
+
+    for (auto& p : particle)
+    {
+        os << p.x() << "\t" << p.y() << "\t 0.0 \t" << p.vx() << "\t" << p.vy() << "\t 0.0 \t"
+           << p.r() << "\t" << p.m() << "\t" << p.ptype()
+           << "\t 1.0e9 \t 0.01 \t 0.0 \t 0.0 \t 0.0 \t 0.0 \t 0.0"
+           << "\t 0.0   \t 0.0  \t 0.0 \t 0.0 \t 0.0 \t 0.0 \t 0.0 \t 0.0 \t 0.0 \n";
+    }
+}
+
+
